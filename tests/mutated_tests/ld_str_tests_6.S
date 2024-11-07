@@ -1,0 +1,36 @@
+addi x0, x0, 0x0
+addi x0, x0, 0x0
+addi x0, x0, 0x0
+LW x26, 42(x7)
+SW x25, -22(x1)
+LB x21, -10(x3)
+SB x23, 36(x5)
+LH x19, 26(x4)
+SH x24, -14(x6)
+LW x12, 520(x8)
+SW x11, -280(x2)
+LB x22, 12(x10)
+SB x20, 30(x9)
+LH x27, -6(x11)
+SH x30, 58(x5)
+LW x31, 38(x13)
+SW x29, -48(x14)
+LB x17, 180(x15)
+SB x28, -88(x7)
+LH x15, 66(x12)
+SH x16, -38(x3)
+LW x9, 260(x16)
+SW x8, -130(x17)
+LB x14, 4(x18)
+SB x13, -4(x19)
+LH x10, 15(x20)
+SH x7, -12(x21)
+LW x5, 32(x23)
+SW x5, 32(x23)
+LB x6, 20(x24)
+SB x6, 20(x24)
+LH x3, 28(x22)
+SH x3, 28(x22)
+addi x0, x0, 0x0
+addi x0, x0, 0x0
+addi x0, x0, 0x0
