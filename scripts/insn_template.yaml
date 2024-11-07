@@ -1,0 +1,463 @@
+instructions:
+  RV32I:
+    LUI:
+      mnemonic: "LUI"
+      operands:
+        - rd: "reg"
+        - imm: "unsigned_20bit"
+      constraints:
+        imm_range: "0-1048575"
+      description: "Load upper immediate to rd"
+      category: "control_transfer"
+
+    AUIPC:
+      mnemonic: "AUIPC"
+      operands:
+        - rd: "reg"
+        - imm: "unsigned_20bit"
+      constraints:
+        imm_range: "0-1048575"
+      description: "Add upper immediate to PC"
+      category: "control_transfer"
+
+    JAL:
+      mnemonic: "JAL"
+      operands:
+        - rd: "reg"
+        - offset: "signed_20bit"
+      constraints:
+        offset_range: "-524288 to 524287"
+      description: "Jump and link"
+      category: "control_transfer"
+
+    JALR:
+      mnemonic: "JALR"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - offset: "signed_12bit"
+      constraints:
+        offset_range: "-2048 to 2047"
+      description: "Jump and link register"
+      category: "control_transfer"
+
+    BEQ:
+      mnemonic: "BEQ"
+      operands:
+        - rs1: "reg"
+        - rs2: "reg"
+        - offset: "signed_12bit"
+      constraints:
+        offset_range: "-2048 to 2047"
+      description: "Branch if equal"
+      category: "branch"
+
+    BNE:
+      mnemonic: "BNE"
+      operands:
+        - rs1: "reg"
+        - rs2: "reg"
+        - offset: "signed_12bit"
+      constraints:
+        offset_range: "-2048 to 2047"
+      description: "Branch if not equal"
+      category: "branch"
+
+    BLT:
+      mnemonic: "BLT"
+      operands:
+        - rs1: "reg"
+        - rs2: "reg"
+        - offset: "signed_12bit"
+      constraints:
+        offset_range: "-2048 to 2047"
+      description: "Branch if less than"
+      category: "branch"
+
+    BGE:
+      mnemonic: "BGE"
+      operands:
+        - rs1: "reg"
+        - rs2: "reg"
+        - offset: "signed_12bit"
+      constraints:
+        offset_range: "-2048 to 2047"
+      description: "Branch if greater or equal"
+      category: "branch"
+
+    BLTU:
+      mnemonic: "BLTU"
+      operands:
+        - rs1: "reg"
+        - rs2: "reg"
+        - offset: "signed_12bit"
+      constraints:
+        offset_range: "-2048 to 2047"
+      description: "Branch if less than (unsigned)"
+      category: "branch"
+
+    BGEU:
+      mnemonic: "BGEU"
+      operands:
+        - rs1: "reg"
+        - rs2: "reg"
+        - offset: "signed_12bit"
+      constraints:
+        offset_range: "-2048 to 2047"
+      description: "Branch if greater or equal (unsigned)"
+      category: "branch"
+
+    LB:
+      mnemonic: "LB"
+      operands:
+        - rd: "reg"
+        - offset: "signed_12bit"
+        - rs1: "reg"
+      constraints:
+        offset_range: "-2048 to 2047"
+      description: "Load byte"
+      category: "load_store"
+
+    LH:
+      mnemonic: "LH"
+      operands:
+        - rd: "reg"
+        - offset: "signed_12bit"
+        - rs1: "reg"
+      constraints:
+        offset_range: "-2048 to 2047"
+      description: "Load halfword"
+      category: "load_store"
+
+    LW:
+      mnemonic: "LW"
+      operands:
+        - rd: "reg"
+        - offset: "signed_12bit"
+        - rs1: "reg"
+      constraints:
+        offset_range: "-2048 to 2047"
+      description: "Load word"
+      category: "load_store"
+
+    LBU:
+      mnemonic: "LBU"
+      operands:
+        - rd: "reg"
+        - offset: "signed_12bit"
+        - rs1: "reg"
+      constraints:
+        offset_range: "-2048 to 2047"
+      description: "Load byte unsigned"
+      category: "load_store"
+
+    LHU:
+      mnemonic: "LHU"
+      operands:
+        - rd: "reg"
+        - offset: "signed_12bit"
+        - rs1: "reg"
+      constraints:
+        offset_range: "-2048 to 2047"
+      description: "Load halfword unsigned"
+      category: "load_store"
+
+    SB:
+      mnemonic: "SB"
+      operands:
+        - rs2: "reg"
+        - offset: "signed_12bit"
+        - rs1: "reg"
+      constraints:
+        offset_range: "-2048 to 2047"
+      description: "Store byte"
+      category: "load_store"
+
+    SH:
+      mnemonic: "SH"
+      operands:
+        - rs2: "reg"
+        - offset: "signed_12bit"
+        - rs1: "reg"
+      constraints:
+        offset_range: "-2048 to 2047"
+      description: "Store halfword"
+      category: "load_store"
+
+    SW:
+      mnemonic: "SW"
+      operands:
+        - rs2: "reg"
+        - offset: "signed_12bit"
+        - rs1: "reg"
+      constraints:
+        offset_range: "-2048 to 2047"
+      description: "Store word"
+      category: "load_store"
+
+    ADDI:
+      mnemonic: "ADDI"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - imm: "signed_12bit"
+      constraints:
+        imm_range: "-2048 to 2047"
+      description: "Add immediate"
+      category: "arithmetic_logical"
+
+    SLTI:
+      mnemonic: "SLTI"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - imm: "signed_12bit"
+      constraints:
+        imm_range: "-2048 to 2047"
+      description: "Set less than immediate"
+      category: "arithmetic_logical"
+
+    SLTIU:
+      mnemonic: "SLTIU"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - imm: "unsigned_12bit"
+      constraints:
+        imm_range: "0 to 2047"
+      description: "Set less than immediate unsigned"
+      category: "arithmetic_logical"
+
+    XORI:
+      mnemonic: "XORI"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - imm: "signed_12bit"
+      constraints:
+        imm_range: "-2048 to 2047"
+      description: "XOR immediate"
+      category: "arithmetic_logical"
+
+    ORI:
+      mnemonic: "ORI"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - imm: "signed_12bit"
+      constraints:
+        imm_range: "-2048 to 2047"
+      description: "OR immediate"
+      category: "arithmetic_logical"
+
+    ANDI:
+      mnemonic: "ANDI"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - imm: "signed_12bit"
+      constraints:
+        imm_range: "-2048 to 2047"
+      description: "AND immediate"
+      category: "arithmetic_logical"
+
+    SLLI:
+      mnemonic: "SLLI"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - shamt: "unsigned_5bit"
+      constraints:
+        shamt_range: "0 to 31"
+      description: "Shift left logical immediate"
+      category: "arithmetic_logical"
+
+    SRLI:
+      mnemonic: "SRLI"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - shamt: "unsigned_5bit"
+      constraints:
+        shamt_range: "0 to 31"
+      description: "Shift right logical immediate"
+      category: "arithmetic_logical"
+
+    SRAI:
+      mnemonic: "SRAI"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - shamt: "unsigned_5bit"
+      constraints:
+        shamt_range: "0 to 31"
+      description: "Shift right arithmetic immediate"
+      category: "arithmetic_logical"
+
+    ADD:
+      mnemonic: "ADD"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - rs2: "reg"
+      description: "Add registers"
+      category: "arithmetic_logical"
+
+    SUB:
+      mnemonic: "SUB"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - rs2: "reg"
+      description: "Subtract registers"
+      category: "arithmetic_logical"
+
+    SLL:
+      mnemonic: "SLL"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - rs2: "reg"
+      description: "Shift left logical"
+      category: "arithmetic_logical"
+
+    SLT:
+      mnemonic: "SLT"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - rs2: "reg"
+      description: "Set less than"
+      category: "arithmetic_logical"
+
+    SLTU:
+      mnemonic: "SLTU"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - rs2: "reg"
+      description: "Set less than unsigned"
+      category: "arithmetic_logical"
+
+    XOR:
+      mnemonic: "XOR"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - rs2: "reg"
+      description: "XOR registers"
+      category: "arithmetic_logical"
+
+    SRL:
+      mnemonic: "SRL"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - rs2: "reg"
+      description: "Shift right logical"
+      category: "arithmetic_logical"
+
+    SRA:
+      mnemonic: "SRA"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - rs2: "reg"
+      description: "Shift right arithmetic"
+      category: "arithmetic_logical"
+
+    OR:
+      mnemonic: "OR"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - rs2: "reg"
+      description: "OR registers"
+      category: "arithmetic_logical"
+
+    AND:
+      mnemonic: "AND"
+      operands:
+        - rd: "reg"
+        - rs1: "reg"
+        - rs2: "reg"
+      description: "AND registers"
+      category: "arithmetic_logical"
+
+    FENCE:
+      mnemonic: "FENCE"
+      operands: []
+      description: "Fence operation"
+      category: "system"
+
+    FENCE.I:
+      mnemonic: "FENCE.I"
+      operands: []
+      description: "Fence instruction operation"
+      category: "system"
+
+    ECALL:
+      mnemonic: "ECALL"
+      operands: []
+      description: "Environment call"
+      category: "system"
+
+    EBREAK:
+      mnemonic: "EBREAK"
+      operands: []
+      description: "Environment break"
+      category: "system"
+
+    CSRRW:
+      mnemonic: "CSRRW"
+      operands:
+        - rd: "reg"
+        - csr: "csr"
+        - rs1: "reg"
+      description: "Atomic Read/Write CSR"
+      category: "system"
+
+    CSRRS:
+      mnemonic: "CSRRS"
+      operands:
+        - rd: "reg"
+        - csr: "csr"
+        - rs1: "reg"
+      description: "Atomic Read/Set CSR"
+      category: "system"
+
+    CSRRC:
+      mnemonic: "CSRRC"
+      operands:
+        - rd: "reg"
+        - csr: "csr"
+        - rs1: "reg"
+      description: "Atomic Read/Clear CSR"
+      category: "system"
+
+    CSRRWI:
+      mnemonic: "CSRRWI"
+      operands:
+        - rd: "reg"
+        - csr: "csr"
+        - uimm: "unsigned_5bit"
+      description: "Atomic Immediate Read/Write CSR"
+      category: "system"
+
+    CSRRSI:
+      mnemonic: "CSRRSI"
+      operands:
+        - rd: "reg"
+        - csr: "csr"
+        - uimm: "unsigned_5bit"
+      description: "Atomic Immediate Read/Set CSR"
+      category: "system"
+
+    CSRRCI:
+      mnemonic: "CSRRCI"
+      operands:
+        - rd: "reg"
+        - csr: "csr"
+        - uimm: "unsigned_5bit"
+      description: "Atomic Immediate Read/Clear CSR"
+      category: "system"
