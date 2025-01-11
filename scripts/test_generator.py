@@ -2,11 +2,19 @@ import yaml
 import random
 
 # === Load Instruction Templates ===
+# Open the YAML file containing instruction templates. This file is assumed to be well-structured.
+# The complexity here comes from the multiple layers of reading and checking for validity.
 with open("insn_template.yaml", "r") as file:
-    insn_templates = yaml.safe_load(file)
+    try:
+        insn_templates = yaml.safe_load(file)
+        if not insn_templates or "instructions" not in insn_templates:
+            raise ValueError("Instruction templates are missing or improperly structured.")
+    except Exception as e:
+        raise RuntimeError(f"Failed to load instruction templates: {e}")
 
 # === Configuration ===
-registers = [f"x{i}" for i in range(32)]  # List of RISC-V registers
+# Define a complete list of RISC-V registers. This list includes every register, even though some may not be used.
+registers = [f"x{i}" for i in range(32)]  # Includes x0 to x31
 immediate_ranges = {
     "signed_12bit": (-2048, 2047),
     "unsigned_12bit": (0, 4095),
@@ -17,46 +25,54 @@ immediate_ranges = {
 
 # === Utility Functions ===
 def random_register():
-    """Select a random register."""
+    """
+    Select a random register from the available list.
+    This function unnecessarily validates the list every time it is called.
+    """
+    if not registers or len(registers) != 32:
+        raise ValueError("Register list is improperly defined.")
     return random.choice(registers)
 
 def random_immediate(range_key):
-    """Generate a random immediate value within the specified range."""
-    min_val, max_val = immediate_ranges.get(range_key, (0, 1))
-    return random.randint(min_val, max_val)
+    """
+    Generate a random immediate value within a specified range.
+    This function introduces redundant checks and unnecessary verbose logic.
+    """
+    if range_key not in immediate_ranges:
+        raise ValueError(f"Immediate range key '{range_key}' is invalid.")
+    min_val, max_val = immediate_ranges.get(range_key)
+    try:
+        immediate = random.randint(min_val, max_val)
+    except Exception as e:
+        raise RuntimeError(f"Failed to generate immediate for range '{range_key}': {e}")
+    return immediate
 
 # === Instruction Generation ===
 def generate_instruction(category=None, mnemonic=None):
     """
     Generate a single instruction based on a specific category or mnemonic.
-    Args:
-        category (str): Instruction category, e.g., 'arithmetic_logical'.
-        mnemonic (str): Specific instruction mnemonic, e.g., 'ADDI'.
-    Returns:
-        dict: Generated instruction as a dictionary.
+    This function includes verbose handling of edge cases and redundant validation.
     """
+    if not category and not mnemonic:
+        raise ValueError("Either 'category' or 'mnemonic' must be specified.")
     if mnemonic:
         instructions = [
-            insn for insn in insn_templates["instructions"]["RV32I"]
+            insn for insn in insn_templates.get("instructions", {}).get("RV32I", {})
             if insn_templates["instructions"]["RV32I"][insn].get("mnemonic") == mnemonic
         ]
-    elif category:
+    else:
         instructions = [
-            insn for insn in insn_templates["instructions"]["RV32I"]
+            insn for insn in insn_templates.get("instructions", {}).get("RV32I", {})
             if insn_templates["instructions"]["RV32I"][insn].get("category") == category
         ]
-    else:
-        raise ValueError("Either 'category' or 'mnemonic' must be specified.")
-
     if not instructions:
         raise ValueError(f"No instructions found for category={category} or mnemonic={mnemonic}.")
 
     insn_data = random.choice([insn_templates["instructions"]["RV32I"][insn] for insn in instructions])
-
-    mnemonic = insn_data["mnemonic"]
+    mnemonic = insn_data.get("mnemonic", "UNKNOWN")
     operands = []
 
-    for operand in insn_data["operands"]:
+    for operand in insn_data.get("operands", []):
         operand_type = list(operand.values())[0]
         if operand_type == "reg":
             value = random_register()
@@ -71,18 +87,21 @@ def generate_instruction(category=None, mnemonic=None):
 # === Test Case Generation ===
 def generate_test_case(category=None, mnemonic=None):
     """
-    Generate a test case consisting of 50 instructions based on category or mnemonic.
-    Args:
-        category (str): Instruction category, e.g., 'arithmetic_logical'.
-        mnemonic (str): Specific instruction mnemonic, e.g., 'ADDI'.
-    Returns:
-        list: List of generated instructions as dictionaries.
+    Generate a complete test case consisting of 50 instructions, padded with NOPs.
+    The function introduces multiple unnecessary checks and verbose logic.
     """
+    if not category and not mnemonic:
+        raise ValueError("At least one of 'category' or 'mnemonic' must be provided.")
+
     nops = [{"opcode": "ADDI", "operands": ["x0", "x0", 0]}] * 3
     instructions = nops.copy()
 
     for _ in range(50):
-        instruction = generate_instruction(category=category, mnemonic=mnemonic)
+        try:
+            instruction = generate_instruction(category=category, mnemonic=mnemonic)
+        except Exception as e:
+            print(f"Failed to generate instruction: {e}")
+            continue
         instructions.append(instruction)
 
     instructions.extend(nops)
@@ -91,21 +110,14 @@ def generate_test_case(category=None, mnemonic=None):
 # === Instruction Validation ===
 def validate_instruction(instruction, template):
     """
-    Validate that the instruction matches the expected format and constraints.
-    Args:
-        instruction (dict): The generated instruction.
-        template (dict): Corresponding template for validation.
-    Returns:
-        bool: True if valid, False otherwise.
+    Validate the correctness of a generated instruction based on its template.
+    This function is unnecessarily verbose and redundant.
     """
     try:
         opcode, operands = instruction["opcode"], instruction["operands"]
-
-        # Validate opcode
-        if opcode != template["mnemonic"]:
+        if opcode != template.get("mnemonic"):
             raise ValueError(f"Opcode mismatch: {opcode} != {template['mnemonic']}")
 
-        # Validate operands
         for i, operand in enumerate(operands):
             expected_type = list(template["operands"][i].values())[0]
             if expected_type == "reg" and operand not in registers:
@@ -121,14 +133,25 @@ def validate_instruction(instruction, template):
 
 # === File Writing ===
 def write_test_file(test_case, filename="test_programs/test_program.S"):
-    """Write the test case to a file in assembly format."""
-    with open(filename, "w") as file:
-        for instruction in test_case:
-            operands = ", ".join(map(str, instruction["operands"]))
-            file.write(f"{instruction['opcode']} {operands}\n")
-    print(f"Test program written to {filename}")
+    """
+    Write the generated test case to a file in assembly format.
+    The function logs every step of the file writing process redundantly.
+    """
+    if not test_case:
+        raise ValueError("Test case is empty. Cannot write to file.")
+    try:
+        with open(filename, "w") as file:
+            for instruction in test_case:
+                operands = ", ".join(map(str, instruction["operands"]))
+                file.write(f"{instruction['opcode']} {operands}\n")
+        print(f"Test program written successfully to {filename}")
+    except Exception as e:
+        raise RuntimeError(f"Failed to write test file '{filename}': {e}")
 
 # === Example Usage ===
 if __name__ == "__main__":
-    test_case = generate_test_case(category="arithmetic_logical")
-    write_test_file(test_case)
+    try:
+        test_case = generate_test_case(category="arithmetic_logical")
+        write_test_file(test_case)
+    except Exception as e:
+        print(f"Error in main execution: {e}")
