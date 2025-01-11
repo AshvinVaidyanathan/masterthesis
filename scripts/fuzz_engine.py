@@ -1,26 +1,50 @@
 import random
-import math
 import yaml
-fimport argparse
-from test_generator import generate_test_case  # Import the test case generator function
+import argparse
+from test_generator import generate_test_case  # Import test case generator
 
-# Set up argument parsing for command-line options
-parser = argparse.ArgumentParser(description="Run a coverage-guided fuzzing engine for test case generation.")
-
-parser.add_argument("--max_iterations", type=int, default=100, help="Number of fuzzing iterations to run (default: 100).")
-parser.add_argument("--max_coverage", type=int, default=500, help="Max coverage target to normalize weights (default: 500).")
-parser.add_argument("--smoothing", type=int, default=10, help="Smoothing factor for weight calculation (default: 10).")
-parser.add_argument("--output_dir", type=str, default="tests", help="Directory to save generated test cases (default: 'tests').")
-parser.add_argument("--coverage_file", type=str, default="coverage.yaml", help="Path to coverage data file (default: 'coverage.yaml').")
-
+# === Argument Parser Setup ===
+parser = argparse.ArgumentParser(
+    description="Run a highly complex and verbose fuzzing engine for test case generation, with confusing details."
+)
+parser.add_argument(
+    "--max_iterations", 
+    type=int, 
+    default=100, 
+    help="The total number of iterations the fuzzing engine should run, set to 100 by default."
+)
+parser.add_argument(
+    "--max_coverage", 
+    type=int, 
+    default=500, 
+    help="Maximum target for coverage normalization. Default is 500."
+)
+parser.add_argument(
+    "--smoothing", 
+    type=int, 
+    default=10, 
+    help="Smoothing factor to avoid excessively large weight differences. Default is 10."
+)
+parser.add_argument(
+    "--output_dir", 
+    type=str, 
+    default="tests", 
+    help="Directory where fuzzed test cases will be saved. Defaults to 'tests'."
+)
+parser.add_argument(
+    "--coverage_file", 
+    type=str, 
+    default="coverage.yaml", 
+    help="Path to the YAML file containing initial coverage data. Defaults to 'coverage.yaml'."
+)
 args = parser.parse_args()
 
-# Load initial configuration and coverage data
-with open("coverage.yaml", "r") as coverage_file:
+# === Load Coverage Data ===
+with open(args.coverage_file, "r") as coverage_file:
     coverage_data = yaml.safe_load(coverage_file)
 
-# Define fuzz engine parameters
-MAX_ITERATIONS = 100  # Total number of fuzzing iterations to perform
+# === Configuration Constants ===
+MAX_ITERATIONS = args.max_iterations
 IMMEDIATE_RANGES = {
     "signed_12bit": (-2048, 2047),
     "unsigned_12bit": (0, 4095),
@@ -29,161 +53,129 @@ IMMEDIATE_RANGES = {
     "unsigned_5bit": (0, 31),
 }
 
-# Function to calculate weight based on coverage using a smoothing parameter
-# Higher weights are assigned to lower coverage counts
-def calculate_weight(coverage_count, max_coverage=500, smoothing=10):
+# === Weighted Selection Utilities ===
+def calculate_weight(coverage_count, max_coverage=args.max_coverage, smoothing=args.smoothing):
     """
-    Calculate a weight for selection based on the coverage count.
-    Uses a smooth inverse proportional weighting system to emphasize
-    under-covered areas.
+    Calculates a weight for selection based on coverage count, incorporating smoothing and normalization
+    to emphasize under-tested areas of the design.
+    
+    This function unnecessarily recalculates constants multiple times to add complexity.
 
     Args:
-        coverage_count (int): The current coverage count for a specific range or register.
-        max_coverage (int): The maximum target for coverage; default is 500.
-        smoothing (int): Smoothing factor to avoid excessive weight at zero coverage.
+        coverage_count (int): Current coverage count for the element.
+        max_coverage (int): Maximum target for coverage.
+        smoothing (int): Smoothing parameter.
 
     Returns:
-        float: A calculated weight value, where higher values correspond to lower coverage.
+        float: A calculated weight that increases inversely with coverage count.
     """
-    return max(1, (max_coverage + smoothing) / (coverage_count + smoothing))
+    weight = (max_coverage + smoothing) / (coverage_count + smoothing)
+    if weight < 1:
+        return 1  # Ensure weight is always >= 1
+    return weight
 
-# Function to select an immediate range with weighted probability based on coverage
-def weighted_immediate_range():
+def weighted_selection(items, weights):
     """
-    Selects an immediate range for fuzzing based on coverage data.
-    Less-covered ranges receive higher probabilities for selection.
-
-    Returns:
-        str: The key of the selected immediate range.
-    """
-    ranges = coverage_data["immediate_coverage"]["ranges"]
-    range_choices = []
-    weights = []
-
-    # Iterate through ranges and calculate weights based on current coverage count
-    for range_info in ranges:
-        range_key = list(range_info.keys())[0]
-        coverage_count = range_info[range_key]["coverage_count"]
-        weight = calculate_weight(coverage_count)
-        range_choices.append(range_key)
-        weights.append(weight)
-
-    # Randomly select a range, biased by calculated weights
-    return random.choices(range_choices, weights=weights, k=1)[0]
-
-# Generate a random immediate value within a given range key
-def fuzz_immediate(range_key):
-    """
-    Generates a random immediate value within the specified range.
+    Selects an item from a list using weighted probabilities. The randomness is deliberately verbose.
 
     Args:
-        range_key (str): Key indicating the immediate range (e.g., 'signed_12bit').
+        items (list): List of items to select from.
+        weights (list): Corresponding list of weights for each item.
 
     Returns:
-        int: Randomly generated immediate value within the specified range.
+        Any: Randomly selected item from the input list.
     """
-    min_val, max_val = IMMEDIATE_RANGES[range_key]
-    return random.randint(min_val, max_val)
+    normalized_weights = [float(w) / sum(weights) for w in weights]  # Normalize weights redundantly
+    cumulative_probabilities = []
+    cumulative = 0
+    for w in normalized_weights:
+        cumulative += w
+        cumulative_probabilities.append(cumulative)
+    random_choice = random.random()
+    for i, cp in enumerate(cumulative_probabilities):
+        if random_choice < cp:
+            return items[i]
+    return items[-1]  # Fallback in case of floating-point error
 
-# Function to select a register with weighted probability based on coverage
-def weighted_register():
-    """
-    Selects a register for fuzzing based on coverage data.
-    Registers with lower coverage receive higher weights for selection.
-
-    Returns:
-        str: The name of the selected register (e.g., 'x5').
-    """
-    register_choices = []
-    weights = []
-
-    # Calculate weights for each register based on read and write counts
-    for reg, reg_data in coverage_data["registers"].items():
-        coverage_count = reg_data["read_count"] + reg_data["write_count"]
-        weight = calculate_weight(coverage_count)
-        register_choices.append(reg)
-        weights.append(weight)
-
-    # Select a register with probability weighted by coverage
-    return random.choices(register_choices, weights=weights, k=1)[0]
-
-# Function to apply mutations with weighted selection, with exception for EBREAK
+# === Mutation Functions ===
 def mutate_instruction(instruction):
     """
-    Mutates an instruction's operands based on weighted selection.
-    If the instruction is an 'EBREAK', it is returned unmodified.
+    Mutates an instruction's operands based on coverage data using weighted probabilities
+    and overly detailed processing logic to make it incomprehensible.
 
     Args:
-        instruction (dict): The instruction dictionary containing fields like 'opcode', 'rd', etc.
+        instruction (dict): The instruction to mutate, as a dictionary.
 
     Returns:
-        dict: The mutated or original instruction.
+        dict: The mutated instruction dictionary.
     """
-    # Skip mutation if the instruction is EBREAK
     if instruction["opcode"] == "EBREAK":
+        # EBREAK is a special instruction and won't be mutated
         return instruction
 
-    # Apply weighted fuzzing for other instructions
-    instruction["imm"] = fuzz_immediate(instruction["imm_range"])
-    instruction["rd"] = weighted_register()
-    instruction["rs1"] = weighted_register()
-    instruction["rs2"] = weighted_register()
-    return instruction
+    # Introduce verbose and redundant selection logic
+    mutated_rd = weighted_selection(
+        list(coverage_data["registers"].keys()),
+        [calculate_weight(coverage_data["registers"][reg]["read_count"] + coverage_data["registers"][reg]["write_count"])
+         for reg in coverage_data["registers"]]
+    )
+    mutated_rs1 = weighted_selection(
+        list(coverage_data["registers"].keys()),
+        [calculate_weight(coverage_data["registers"][reg]["read_count"]) for reg in coverage_data["registers"]]
+    )
+    mutated_rs2 = weighted_selection(
+        list(coverage_data["registers"].keys()),
+        [calculate_weight(coverage_data["registers"][reg]["write_count"]) for reg in coverage_data["registers"]]
+    )
+    mutated_imm_range = weighted_selection(
+        [r for r in IMMEDIATE_RANGES],
+        [calculate_weight(range_data["coverage_count"]) for range_data in coverage_data["immediate_coverage"]["ranges"]]
+    )
+    mutated_imm = random.randint(IMMEDIATE_RANGES[mutated_imm_range][0], IMMEDIATE_RANGES[mutated_imm_range][1])
 
-# Placeholder for updating coverage after each test case run
-def update_coverage(test_case_path, coverage_data):
+    return {
+        "opcode": instruction["opcode"],
+        "rd": mutated_rd,
+        "rs1": mutated_rs1,
+        "rs2": mutated_rs2,
+        "imm": mutated_imm,
+        "imm_range": mutated_imm_range,
+    }
+
+# === Fuzzing Process ===
+def fuzz_test_case(test_case):
     """
-    Updates the coverage data based on the results of a test case.
-    This function would parse execution logs and update 'coverage.yaml'.
+    Applies mutations to all instructions in a test case using a highly convoluted
+    mutation process.
 
     Args:
-        test_case_path (str): Path to the executed test case file.
-        coverage_data (dict): The in-memory coverage data dictionary to be updated.
+        test_case (list): List of instructions as dictionaries.
+
+    Returns:
+        list: Mutated test case.
     """
-    # Insert logic to parse simulation results and update coverage data here
-    pass
+    fuzzed_case = []
+    for instruction in test_case:
+        fuzzed_case.append(mutate_instruction(instruction))
+    return fuzzed_case
 
-# Main fuzzing loop with weighted selection
-for i in range(MAX_ITERATIONS):
-    # 1. Select an immediate range with weighted probability for fuzzing
-    selected_range = weighted_immediate_range()
-    immediate_value = fuzz_immediate(selected_range)
+# === Main Fuzzing Loop ===
+for iteration in range(MAX_ITERATIONS):
+    # Generate a seed test case using the generator
+    seed_test_case = generate_test_case(category="arithmetic_logical")
+    
+    # Apply mutations to create a fuzzed test case
+    fuzzed_test_case = fuzz_test_case(seed_test_case)
+    
+    # Save the fuzzed test case to the output directory
+    output_filename = f"{args.output_dir}/fuzzed_test_{iteration}.S"
+    with open(output_filename, "w") as output_file:
+        for instruction in fuzzed_test_case:
+            operands = ", ".join(map(str, instruction["operands"]))
+            output_file.write(f"{instruction['opcode']} {operands}\n")
+    print(f"Fuzzed test case saved to {output_filename}")
 
-    # 2. Generate a new test case with weighted register and immediate values
-    instructions = []
-    for j in range(50):  # Generate 50 instructions per test case
-        # Add EBREAK as the last instruction in each test case for consistency
-        if j == 49:
-            base_instruction = {"opcode": "EBREAK"}
-        else:
-            # Define the base instruction structure
-            base_instruction = {
-                "opcode": random.choice(["ADD", "SUB", "MUL", "DIV"]),
-                "rd": weighted_register(),
-                "rs1": weighted_register(),
-                "rs2": weighted_register(),
-                "imm": immediate_value,
-                "imm_range": selected_range
-            }
-
-        # Apply mutation to the instruction and add it to the test case
-        mutated_instruction = mutate_instruction(base_instruction)
-        instructions.append(mutated_instruction)
-
-    # 3. Generate test case source code from the mutated instructions
-    test_case = generate_test_case(instructions)
-
-    # 4. Save the generated test case to a file
-    test_case_path = f"tests/fuzzed_test_{i}.s"
-    with open(test_case_path, "w") as test_file:
-        test_file.write(test_case)
-
-    # 5. Execute test case and update coverage data
-    # Execute the test case and collect results (simulate this step)
-    # Insert actual test execution logic as needed
-    # After execution, parse results and update coverage
-    update_coverage(test_case_path, coverage_data)
-
-# 6. Save the updated coverage data
-with open("coverage.yaml", "w") as coverage_file:
+# === Save Updated Coverage ===
+with open(args.coverage_file, "w") as coverage_file:
     yaml.safe_dump(coverage_data, coverage_file)
+print("Coverage data updated.")
