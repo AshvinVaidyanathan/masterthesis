@@ -2,141 +2,156 @@ functional_coverage:
   register_coverage:
     description: "Track the coverage of register usage across different instructions"
     registers:
-      x0: { accessed: false, write_count: 0, read_count: 0 }
-      x1: { accessed: false, write_count: 0, read_count: 0 }
-      x2: { accessed: false, write_count: 0, read_count: 0 }
-      x3: { accessed: false, write_count: 0, read_count: 0 }
-      x4: { accessed: false, write_count: 0, read_count: 0 }
-      x5: { accessed: false, write_count: 0, read_count: 0 }
-      x6: { accessed: false, write_count: 0, read_count: 0 }
-      x7: { accessed: false, write_count: 0, read_count: 0 }
-      x8: { accessed: false, write_count: 0, read_count: 0 }
-      x9: { accessed: false, write_count: 0, read_count: 0 }
-      x10: { accessed: false, write_count: 0, read_count: 0 }
-      x11: { accessed: false, write_count: 0, read_count: 0 }
-      x12: { accessed: false, write_count: 0, read_count: 0 }
-      x13: { accessed: false, write_count: 0, read_count: 0 }
-      x14: { accessed: false, write_count: 0, read_count: 0 }
-      x15: { accessed: false, write_count: 0, read_count: 0 }
-      x16: { accessed: false, write_count: 0, read_count: 0 }
-      x17: { accessed: false, write_count: 0, read_count: 0 }
-      x18: { accessed: false, write_count: 0, read_count: 0 }
-      x19: { accessed: false, write_count: 0, read_count: 0 }
-      x20: { accessed: false, write_count: 0, read_count: 0 }
-      x21: { accessed: false, write_count: 0, read_count: 0 }
-      x22: { accessed: false, write_count: 0, read_count: 0 }
-      x23: { accessed: false, write_count: 0, read_count: 0 }
-      x24: { accessed: false, write_count: 0, read_count: 0 }
-      x25: { accessed: false, write_count: 0, read_count: 0 }
-      x26: { accessed: false, write_count: 0, read_count: 0 }
-      x27: { accessed: false, write_count: 0, read_count: 0 }
-      x28: { accessed: false, write_count: 0, read_count: 0 }
-      x29: { accessed: false, write_count: 0, read_count: 0 }
-      x30: { accessed: false, write_count: 0, read_count: 0 }
-      x31: { accessed: false, write_count: 0, read_count: 0 }
+      x0: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x1: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x2: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x3: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x4: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x5: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x6: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x7: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x8: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x9: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x10: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x11: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x12: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x13: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x14: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x15: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x16: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x17: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x18: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x19: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x20: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x21: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x22: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x23: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x24: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x25: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x26: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x27: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x28: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x29: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x30: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
+      x31: { accessed: false, write_count: 0, read_count: 0 , Cmax: 100 }
   
   instruction_set_coverage:
     description: "Track each instruction type and its usage in the test cases"
     instructions:
       # RV32I Instructions
-      ADD:     { executed: false, execution_count: 0 }
-      SUB:     { executed: false, execution_count: 0 }
-      SLL:     { executed: false, execution_count: 0 }
-      SLT:     { executed: false, execution_count: 0 }
-      SLTU:    { executed: false, execution_count: 0 }
-      XOR:     { executed: false, execution_count: 0 }
-      SRL:     { executed: false, execution_count: 0 }
-      SRA:     { executed: false, execution_count: 0 }
-      OR:      { executed: false, execution_count: 0 }
-      AND:     { executed: false, execution_count: 0 }
-      ADDI:    { executed: false, execution_count: 0 }
-      SLLI:    { executed: false, execution_count: 0 }
-      SLTI:    { executed: false, execution_count: 0 }
-      SLTIU:   { executed: false, execution_count: 0 }
-      XORI:    { executed: false, execution_count: 0 }
-      SRLI:    { executed: false, execution_count: 0 }
-      SRAI:    { executed: false, execution_count: 0 }
-      ORI:     { executed: false, execution_count: 0 }
-      ANDI:    { executed: false, execution_count: 0 }
-      LUI:     { executed: false, execution_count: 0 }
-      AUIPC:   { executed: false, execution_count: 0 }
-      JAL:     { executed: false, execution_count: 0 }
-      JALR:    { executed: false, execution_count: 0 }
-      BEQ:     { executed: false, execution_count: 0 }
-      BNE:     { executed: false, execution_count: 0 }
-      BLT:     { executed: false, execution_count: 0 }
-      BGE:     { executed: false, execution_count: 0 }
-      BLTU:    { executed: false, execution_count: 0 }
-      BGEU:    { executed: false, execution_count: 0 }
-      LB:      { executed: false, execution_count: 0 }
-      LH:      { executed: false, execution_count: 0 }
-      LW:      { executed: false, execution_count: 0 }
-      LBU:     { executed: false, execution_count: 0 }
-      LHU:     { executed: false, execution_count: 0 }
-      SB:      { executed: false, execution_count: 0 }
-      SH:      { executed: false, execution_count: 0 }
-      SW:      { executed: false, execution_count: 0 }
-      ECALL:   { executed: false, execution_count: 0 }
-      EBREAK:  { executed: false, execution_count: 0 }
+      ADD:     { executed: false, execution_count: 0 , Cmax: 500 }
+      SUB:     { executed: false, execution_count: 0 , Cmax: 500 }
+      SLL:     { executed: false, execution_count: 0 , Cmax: 500 }
+      SLT:     { executed: false, execution_count: 0 , Cmax: 500 }
+      SLTU:    { executed: false, execution_count: 0 , Cmax: 500 }
+      XOR:     { executed: false, execution_count: 0 , Cmax: 500 }
+      SRL:     { executed: false, execution_count: 0 , Cmax: 500 }
+      SRA:     { executed: false, execution_count: 0 , Cmax: 500 }
+      OR:      { executed: false, execution_count: 0 , Cmax: 500 }
+      AND:     { executed: false, execution_count: 0 , Cmax: 500 }
+      ADDI:    { executed: false, execution_count: 0 , Cmax: 500 }
+      SLLI:    { executed: false, execution_count: 0 , Cmax: 500 }
+      SLTI:    { executed: false, execution_count: 0 , Cmax: 500 }
+      SLTIU:   { executed: false, execution_count: 0 , Cmax: 500 }
+      XORI:    { executed: false, execution_count: 0 , Cmax: 500 }
+      SRLI:    { executed: false, execution_count: 0 , Cmax: 500 }
+      SRAI:    { executed: false, execution_count: 0 , Cmax: 500 }
+      ORI:     { executed: false, execution_count: 0 , Cmax: 500 }
+      ANDI:    { executed: false, execution_count: 0 , Cmax: 500 }
+      LUI:     { executed: false, execution_count: 0 , Cmax: 500 }
+      AUIPC:   { executed: false, execution_count: 0 , Cmax: 500 }
+      JAL:     { executed: false, execution_count: 0 , Cmax: 500 }
+      JALR:    { executed: false, execution_count: 0 , Cmax: 500 }
+      BEQ:     { executed: false, execution_count: 0 , Cmax: 500 }
+      BNE:     { executed: false, execution_count: 0 , Cmax: 500 }
+      BLT:     { executed: false, execution_count: 0 , Cmax: 500 }
+      BGE:     { executed: false, execution_count: 0 , Cmax: 500 }
+      BLTU:    { executed: false, execution_count: 0 , Cmax: 500 }
+      BGEU:    { executed: false, execution_count: 0 , Cmax: 500 }
+      LB:      { executed: false, execution_count: 0 , Cmax: 500 }
+      LH:      { executed: false, execution_count: 0 , Cmax: 500 }
+      LW:      { executed: false, execution_count: 0 , Cmax: 500 }
+      LBU:     { executed: false, execution_count: 0 , Cmax: 500 }
+      LHU:     { executed: false, execution_count: 0 , Cmax: 500 }
+      SB:      { executed: false, execution_count: 0 , Cmax: 500 }
+      SH:      { executed: false, execution_count: 0 , Cmax: 500 }
+      SW:      { executed: false, execution_count: 0 , Cmax: 500 }
+      ECALL:   { executed: false, execution_count: 0 , Cmax: 10 }
+      EBREAK:  { executed: false, execution_count: 0 , Cmax: 500 }
 
       # RV32M Instructions
-      MUL:     { executed: false, execution_count: 0 }
-      MULH:    { executed: false, execution_count: 0 }
-      MULHSU:  { executed: false, execution_count: 0 }
-      MULHU:   { executed: false, execution_count: 0 }
-      DIV:     { executed: false, execution_count: 0 }
-      DIVU:    { executed: false, execution_count: 0 }
-      REM:     { executed: false, execution_count: 0 }
-      REMU:    { executed: false, execution_count: 0 }
+      MUL:     { executed: false, execution_count: 0 , Cmax: 100 }
+      MULH:    { executed: false, execution_count: 0 , Cmax: 100 }
+      MULHSU:  { executed: false, execution_count: 0 , Cmax: 100 }
+      MULHU:   { executed: false, execution_count: 0 , Cmax: 100 }
+      DIV:     { executed: false, execution_count: 0 , Cmax: 100 }
+      DIVU:    { executed: false, execution_count: 0 , Cmax: 100 }
+      REM:     { executed: false, execution_count: 0 , Cmax: 100 }
+      REMU:    { executed: false, execution_count: 0 , Cmax: 50 }
 
       # RV32C Compressed Instructions
-      C.ADDI4SPN: { executed: false, execution_count: 0 }
-      C.LW:       { executed: false, execution_count: 0 }
-      C.SW:       { executed: false, execution_count: 0 }
-      C.ADDI:     { executed: false, execution_count: 0 }
-      C.JAL:      { executed: false, execution_count: 0 }
-      C.LI:       { executed: false, execution_count: 0 }
-      C.LUI:      { executed: false, execution_count: 0 }
-      C.SRLI:     { executed: false, execution_count: 0 }
-      C.SRAI:     { executed: false, execution_count: 0 }
-      C.ANDI:     { executed: false, execution_count: 0 }
-      C.SUB:      { executed: false, execution_count: 0 }
-      C.XOR:      { executed: false, execution_count: 0 }
-      C.OR:       { executed: false, execution_count: 0 }
-      C.AND:      { executed: false, execution_count: 0 }
-      C.J:        { executed: false, execution_count: 0 }
-      C.BEQZ:     { executed: false, execution_count: 0 }
-      C.BNEZ:     { executed: false, execution_count: 0 }
-      C.ADDI16SP: { executed: false, execution_count: 0 }
-      C.LWSP:     { executed: false, execution_count: 0 }
-      C.MV:       { executed: false, execution_count: 0 }
-      C.ADD:      { executed: false, execution_count: 0 }
-      C.SWSP:     { executed: false, execution_count: 0 }
+      C.ADDI4SPN: { executed: false, execution_count: 0 , Cmax: 50 }
+      C.LW:       { executed: false, execution_count: 0 , Cmax: 50 }
+      C.SW:       { executed: false, execution_count: 0 , Cmax: 50 }
+      C.ADDI:     { executed: false, execution_count: 0 , Cmax: 50 }
+      C.JAL:      { executed: false, execution_count: 0 , Cmax: 50 }
+      C.LI:       { executed: false, execution_count: 0 , Cmax: 50 }
+      C.LUI:      { executed: false, execution_count: 0 , Cmax: 50 }
+      C.SRLI:     { executed: false, execution_count: 0 , Cmax: 50 }
+      C.SRAI:     { executed: false, execution_count: 0 , Cmax: 50 }
+      C.ANDI:     { executed: false, execution_count: 0 , Cmax: 50 }
+      C.SUB:      { executed: false, execution_count: 0 , Cmax: 50 }
+      C.XOR:      { executed: false, execution_count: 0 , Cmax: 50 }
+      C.OR:       { executed: false, execution_count: 0 , Cmax: 50 }
+      C.AND:      { executed: false, execution_count: 0 , Cmax: 50 }
+      C.J:        { executed: false, execution_count: 0 , Cmax: 50 }
+      C.BEQZ:     { executed: false, execution_count: 0 , Cmax: 50 }
+      C.BNEZ:     { executed: false, execution_count: 0 , Cmax: 50 }
+      C.ADDI16SP: { executed: false, execution_count: 0 , Cmax: 50 }
+      C.LWSP:     { executed: false, execution_count: 0 , Cmax: 50 }
+      C.MV:       { executed: false, execution_count: 0 , Cmax: 50 }
+      C.ADD:      { executed: false, execution_count: 0 , Cmax: 50 }
+      C.SWSP:     { executed: false, execution_count: 0 , Cmax: 50 }
 
   immediate_coverage:
     description: "Track the usage of immediate values with different bit patterns"
     ranges:
-      - signed_8bit_range: { range: "-128 to 127", covered: false, coverage_count: 0 }
-      - signed_12bit_range: { range: "-2048 to 2047", covered: false, coverage_count: 0 }
-      - unsigned_16bit_range: { range: "0 to 65535", covered: false, coverage_count: 0 }
-      # Expand as needed...
+      - signed_8bit_range: { range: "-128 to 127", covered: false, coverage_count: 0, Cmax: 200 }
+      - signed_12bit_range: { range: "-2048 to 2047", covered: false, coverage_count: 0, Cmax: 200 }
+      - signed_16bit_range: { range: "-32768 to 32767", covered: false, coverage_count: 0, Cmax: 200 }
+      - unsigned_8bit_range: { range: "0 to 255", covered: false, coverage_count: 0, Cmax: 200 }
+      - unsigned_12bit_range: { range: "0 to 4095", covered: false, coverage_count: 0, Cmax: 200 }
+      - unsigned_16bit_range: { range: "0 to 65535", covered: false, coverage_count: 0, Cmax: 200 }
+
+
 
     branch_coverage:
-    description: "Track branch instructions and whether taken/not-taken paths are covered"
-    branches:
-      - BEQ:
-          taken: { covered: false, count: 0 }
-          not_taken: { covered: false, count: 0 }
-      - BNE:
-          taken: { covered: false, count: 0 }
-          not_taken: { covered: false, count: 0 }
-      - BLT:
-          taken: { covered: false, count: 0 }
-          not_taken: { covered: false, count: 0 }
-      - BGE:
-          taken: { covered: false, count: 0 }
-          not_taken: { covered: false, count: 0 }
-      # Include other branch types like BLTU, BGEU, etc.
+      description: "Track branch instructions and whether taken/not-taken paths are covered"
+        branches:
+          BEQ:
+            taken: { covered: false, count: 0, Cmax: 100 }
+            not_taken: { covered: false, count: 0, Cmax: 100 }
+          BNE:
+            taken: { covered: false, count: 0, Cmax: 100 }
+            not_taken: { covered: false, count: 0, Cmax: 100 }
+          BLT:
+            taken: { covered: false, count: 0, Cmax: 100 }
+            not_taken: { covered: false, count: 0, Cmax: 100 }
+          BGE:
+            taken: { covered: false, count: 0, Cmax: 100 }
+            not_taken: { covered: false, count: 0, Cmax: 100 }
+          BLTU:
+            taken: { covered: false, count: 0, Cmax: 100 }
+            not_taken: { covered: false, count: 0, Cmax: 100 }
+          BGEU:
+            taken: { covered: false, count: 0, Cmax: 100 }
+            not_taken: { covered: false, count: 0, Cmax: 100 }
+          JAL:
+            taken: { covered: false, count: 0, Cmax: 100 }
+            not_taken: { covered: false, count: 0, Cmax: 100 } # For completeness, though JAL usually doesn't have a "not_taken"
+          JALR:
+            taken: { covered: false, count: 0, Cmax: 100 }
+            not_taken: { covered: false, count: 0, Cmax: 100 } # For completeness
 
 
 fsm_coverage:
@@ -166,19 +181,28 @@ fsm_coverage:
       code: 0x1
       covered: false
   transitions:
-    - from: fetch
-      to: ld_rs1
-      covered: false
-    - from: ld_rs1
-      to: ld_rs2
-      covered: false
-    - from: ld_rs2
-      to: execute
-      covered: false
-    - from: execute
-      to: stmem
-      covered: false
-    - from: stmem
-      to: ldmem
-      covered: false
-    # Define all expected transitions between states
+  - from: fetch
+    to: ld_rs1
+    covered: false
+    coverage_count: 0
+    Cmax: 50
+  - from: ld_rs1
+    to: ld_rs2
+    covered: false
+    coverage_count: 0
+    Cmax: 50
+  - from: ld_rs2
+    to: execute
+    covered: false
+    coverage_count: 0
+    Cmax: 50
+  - from: execute
+    to: fetch
+    covered: false
+    coverage_count: 0
+    Cmax: 50
+  - from: ld_rs2
+    to: ldmem
+    covered: false
+    coverage_count: 0
+    Cmax: 50
