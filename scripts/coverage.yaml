@@ -129,29 +129,29 @@ functional_coverage:
       description: "Track branch instructions and whether taken/not-taken paths are covered"
         branches:
           BEQ:
-            taken: { covered: false, count: 0, Cmax: 100 }
-            not_taken: { covered: false, count: 0, Cmax: 100 }
+            taken: { covered: false, count: 0, Cmax: 25 }
+            not_taken: { covered: false, count: 0, Cmax: 25 }
           BNE:
-            taken: { covered: false, count: 0, Cmax: 100 }
-            not_taken: { covered: false, count: 0, Cmax: 100 }
+            taken: { covered: false, count: 0, Cmax: 25 }
+            not_taken: { covered: false, count: 0, Cmax: 25 }
           BLT:
-            taken: { covered: false, count: 0, Cmax: 100 }
-            not_taken: { covered: false, count: 0, Cmax: 100 }
+            taken: { covered: false, count: 0, Cmax: 25 }
+            not_taken: { covered: false, count: 0, Cmax: 25 }
           BGE:
-            taken: { covered: false, count: 0, Cmax: 100 }
-            not_taken: { covered: false, count: 0, Cmax: 100 }
+            taken: { covered: false, count: 0, Cmax: 25 }
+            not_taken: { covered: false, count: 0, Cmax: 25 }
           BLTU:
-            taken: { covered: false, count: 0, Cmax: 100 }
-            not_taken: { covered: false, count: 0, Cmax: 100 }
+            taken: { covered: false, count: 0, Cmax: 25 }
+            not_taken: { covered: false, count: 0, Cmax: 25 }
           BGEU:
-            taken: { covered: false, count: 0, Cmax: 100 }
-            not_taken: { covered: false, count: 0, Cmax: 100 }
+            taken: { covered: false, count: 0, Cmax: 25 }
+            not_taken: { covered: false, count: 0, Cmax: 25 }
           JAL:
-            taken: { covered: false, count: 0, Cmax: 100 }
-            not_taken: { covered: false, count: 0, Cmax: 100 } # For completeness, though JAL usually doesn't have a "not_taken"
+            taken: { covered: false, count: 0, Cmax: 25 }
+            not_taken: { covered: false, count: 0, Cmax: 25 } # For completeness, though JAL usually doesn't have a "not_taken"
           JALR:
-            taken: { covered: false, count: 0, Cmax: 100 }
-            not_taken: { covered: false, count: 0, Cmax: 100 } # For completeness
+            taken: { covered: false, count: 0, Cmax: 25 }
+            not_taken: { covered: false, count: 0, Cmax: 25 } # For completeness
 
 
 fsm_coverage:
